@@ -23,7 +23,8 @@ def get_response(LLM_config, text):
                     max_tokens=LLM_config['max_tokens'],
                     frequency_penalty=LLM_config['frequency_penalty'],
                     presence_penalty=LLM_config['presence_penalty'],
-                    n=LLM_config['n']
+                    n=LLM_config['n'],
+                    request_timeout=60
                 )
                 return response
         except Exception as e:

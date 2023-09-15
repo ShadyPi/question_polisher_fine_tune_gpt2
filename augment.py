@@ -39,13 +39,14 @@ def exam(dataset, question, answer, examinee_config):
     return correct/total
 
 
-def select(dataset, base_score, candidates, answer, beam_width, examinee_config):
+def select(dataset, base_score, candidates, answer, beam_width, examinee_config, last_step):
     question_score = []
     for candidate in candidates:
         score = exam(dataset, candidate, answer, examinee_config)
         if score < base_score:
             continue
         question_score.append((score, len(candidate), candidate))
+    question_score += last_step
     question_score.sort(key=lambda x: (-x[0], x[1]))
     return question_score[:beam_width]
 
@@ -57,13 +58,15 @@ def polish(dataset, base_question, answer, examiner_config, examinee_config, ste
         last_step = polish_step[index-1]
         this_step = []
         min_score = 1.0
+        max_score = 0.0
         for score, length, question in last_step:
             min_score = min(min_score, score)
+            max_score = max(max_score, score)
         if min_score == 1.0:
             break
         for score, length, question in last_step:
             this_step += augment(dataset, question, examiner_config)
-        this_step = select(dataset, min_score, this_step, answer, beam_width, examinee_config)
+        this_step = select(dataset, min_score, this_step, answer, beam_width, examinee_config, last_step)
         if len(this_step) == 0:
             this_step = last_step
         polish_step.append(this_step)
