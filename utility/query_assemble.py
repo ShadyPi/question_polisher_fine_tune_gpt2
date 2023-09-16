@@ -1,7 +1,7 @@
 from string import Template
 
 
-instruction = 'Please simplify the following question to make it easier to solve.\n\n'
+instruction = 'Please rewrite the following question to make it easier to solve.\n\n'
 
 
 def augment_GSM8K(question):
