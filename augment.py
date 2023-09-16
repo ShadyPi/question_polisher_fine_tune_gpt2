@@ -32,7 +32,7 @@ def exam(dataset, question, answer, examinee_config):
         predicts.append(predict)
     count = Counter(predicts)
     correct = count[answer]
-    print(predicts)
+    # print(predicts)
     return correct/total
 
 
@@ -67,7 +67,7 @@ def polish(dataset, base_question, answer, examiner_config, examinee_config, ste
         if len(this_step) == 0:
             this_step = last_step
         polish_step.append(this_step)
-        print('Polish step#'+str(index))
+        print('Polish step#'+str(index), min_score, max_score)
     return polish_step
 
 
