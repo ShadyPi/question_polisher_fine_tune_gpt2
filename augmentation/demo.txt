@@ -1,8 +1,2 @@
-The following examplars show how you answer a question: only output answers that consist of pure digits without any unit or explaination.
 
-Question: James decides to bulk up.  He weighs 120 kg and gains 20% of his body weight in muscle and 1 quarter that much in fat.  How much does he weigh now?
-Answer: 150
-
-Question: Mark deposited $88 in a bank. Bryan deposited $40 less than five times as much as Mark. How much did Mark deposit in the bank?
-Answer: 400
 

@@ -1,4 +1,5 @@
 import json
+import csv
 import os
 
 
@@ -34,13 +35,27 @@ def save_jsonl(file_path, data):
 
 
 def pack_trajectory(trajectory):
+    def tuple2dic(item):
+        return {'question': item[2], 'score': item[0]}
     cnt = 0
-    log = {}
+    log = []
+    base = tuple2dic(trajectory[0][0])
+    best = tuple2dic(trajectory[-1][0])
+    package = {'base_question': base, 'best_question': best}
     for step in trajectory:
         candidates = []
         for candidate in step:
-            temp = {'question': candidate[2], 'score': candidate[0]}
+            temp = tuple2dic(candidate)
             candidates.append(temp)
-        log[str(cnt)] = candidates
+        log.append(candidates)
         cnt += 1
-    return log
+    package['log'] = log
+    return package
+
+
+def save_csv(file_path, data, header=None):
+    with open(file_path, 'w') as f:
+        writer = csv.writer(f, lineterminator='\n')
+        if header:
+            writer.writerow(header)
+        writer.writerows(data)

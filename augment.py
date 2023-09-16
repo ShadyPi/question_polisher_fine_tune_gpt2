@@ -1,7 +1,7 @@
 import csv
 from collections import Counter
 import yaml
-from utility import dataset_access, llm, query_assemble
+from utility import dataset_access, llm, query_assemble, metrics
 
 raw_datasets_path = r'./raw_datasets/'
 augmentation_path = r'./augmentation/'
@@ -28,14 +28,11 @@ def exam(dataset, question, answer, examinee_config):
     predicts = []
     total = examinee_config['n']
     for choice in response['choices']:
-        try:
-            predict = int(choice['message']['content'])
-            predicts.append(predict)
-        except ValueError as e:
-            continue
+        predict = metrics.clean_response(dataset, choice['message']['content'])
+        predicts.append(predict)
     count = Counter(predicts)
     correct = count[answer]
-    # print(predicts)
+    print(predicts)
     return correct/total
 
 
@@ -43,7 +40,7 @@ def select(dataset, base_score, candidates, answer, beam_width, examinee_config,
     question_score = []
     for candidate in candidates:
         score = exam(dataset, candidate, answer, examinee_config)
-        if score < base_score:
+        if score < base_score or score == 0.0:
             continue
         question_score.append((score, len(candidate), candidate))
     question_score += last_step
@@ -96,12 +93,14 @@ if __name__ == '__main__':
             data = dataset_access.load_json(raw_dataset_path, start_point, end_point)
         trajectory_list = []
         for item in data:
-            print('Current item:', len(trajectory_list))
-            answer = int(item['answer'].split('####')[1])
+            # print('Current item:', len(trajectory_list))
+            answer = int(item['answer'].split('####')[1].replace(',', ''))
             trajectory = polish(dataset, item['question'], answer, examiner_config, examinee_config, step_num, beam_width)
-            log = dataset_access.pack_trajectory(trajectory)
-            # save_path = augmentation_path+dataset+'/train_'+str(start_point+len(trajectory_list))+'.json'
-            # dataset_access.save_json(save_path, log)
-            trajectory_list.append(log)
+            package = dataset_access.pack_trajectory(trajectory)
+            id_num = str(start_point+len(trajectory_list))
+            save_path = augmentation_path+dataset+'/trajectory_'+id_num+'.json'
+            dataset_access.save_jsonl(save_path, [package])
+            print('Current item:', id_num, package['base_question']['score'], package['best_question']['score'])
+            trajectory_list.append(package)
         save_path = augmentation_path+dataset+'/trajectory_'+str(start_point)+'_'+str(end_point)+'.jsonl'
         dataset_access.save_jsonl(save_path, trajectory_list)

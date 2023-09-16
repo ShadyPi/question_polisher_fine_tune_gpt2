@@ -1,0 +1,76 @@
+{
+    "base_question": {
+        "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+        "score": 0.0
+    },
+    "best_question": {
+        "question": "Simplified question: How much did Alexis pay for the shoes if she had a budget of $200 and spent $159 on clothes?",
+        "score": 1.0
+    },
+    "log": [
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "To simplify the question, we need to find out how much Alexis paid for the shoes. She had a budget of $200 and spent a total of $30 on a shirt, $46 on pants, $38 on a coat, $11 on socks, and $18 on a belt. Additionally, she has $16 left from the budget. Let's find out how much she paid for the shoes.\n\nTo calculate the cost of the shoes, we need to subtract the amounts spent on the shirt, pants, coat, socks, belt, and the remaining budget from the total budget.\n\nTotal budget: $200\nAmount spent on the shirt: $30\nAmount spent on the pants: $46\nAmount spent on the coat: $38\nAmount spent on socks: $11\nAmount spent on the belt: $18\nRemaining budget: $16\n\nTotal amount spent: $30 + $46 + $38 + $11 + $18 + $16 = $159\n\nTherefore, Alexis paid $159 for the clothes, which means she paid $200 - $159 = $41 for the shoes.",
+                "score": 1.0
+            },
+            {
+                "question": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+                "score": 0.0
+            }
+        ],
+        [
+            {
+                "question": "Simplified question: How much did Alexis pay for the shoes if she had a budget of $200 and spent $159 on clothes?",
+                "score": 1.0
+            },
+            {
+                "question": "Simplified question: Alexis had a budget of $200. She spent $159 on clothes and has $41 left for the shoes. How much did she pay for the shoes?",
+                "score": 1.0
+            },
+            {
+                "question": "Simplified question: How much did Alexis pay for the shoes?\n\nSolution: To find the cost of the shoes, we subtract the total amount spent on clothes ($159) from Alexis's budget ($200). Therefore, Alexis paid $41 for the shoes.",
+                "score": 1.0
+            },
+            {
+                "question": "Question: How much did Alexis pay for the shoes?\n\nTo find the cost of the shoes, we need to subtract the total amount spent on other items from the budget.\n\nTotal budget: $200\nAmount spent on other items: $159\n\nTherefore, Alexis paid $41 for the shoes.",
+                "score": 1.0
+            }
+        ]
+    ]
+}

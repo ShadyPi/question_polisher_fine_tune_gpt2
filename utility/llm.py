@@ -3,8 +3,9 @@ import os
 import asyncio
 import time
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
-system_prompt = 'You are a helpful assistant.'
+# openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = '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'
+system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'
 
 
 def get_response(LLM_config, text):
@@ -53,13 +54,14 @@ async def async_get_response(LLM_config, texts):
                         max_tokens=LLM_config['max_tokens'],
                         frequency_penalty=LLM_config['frequency_penalty'],
                         presence_penalty=LLM_config['presence_penalty'],
-                        n=LLM_config['n']
+                        n=LLM_config['n'],
+                        request_timeout=60
                     ) for message in message_batch]
                     async_responses = await asyncio.gather(*async_request)
                 except Exception as e:
                     print(e)
                     print("Retrying....")
-                    time.sleep(60)
+                    time.sleep(30)
             responses += async_responses
             print('Batch #{}: question {}-{}'.format(batch_num, batch_size*batch_num, min(batch_size*(batch_num+1)-1, len(messages))))
         return responses
