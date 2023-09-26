@@ -87,7 +87,7 @@ def model_polish(tokenizer, model, text):
         return polished_text
 
 
-def evaluate(epoch, tokenizer, model):
+def evaluate(epoch, tokenizer, model, polisher):
     raw_datasets_path = r'./raw_datasets/'
     results_path = r'./polished_test_results/'
     config_path = results_path + 'config.yaml'
@@ -115,7 +115,7 @@ def evaluate(epoch, tokenizer, model):
         if dataset == 'GSM8K':
             with open(r'./augmentation/demo.txt', 'r') as f:
                 demo = f.read()
-            queries = [query_assemble.score_GSM8K(demo, model_polish(tokenizer, model, formulate(item['question']))) for item in data]
+            queries = [query_assemble.score_GSM8K(demo, polisher(tokenizer, model, formulate(item['question']))) for item in data]
         results = llm.async_query(test_config, queries)
         correct = 0
         for index in range(len(data)):
@@ -183,7 +183,7 @@ if __name__ == '__main__':
             print(f"Step {step}/{len(batched_data)} - Loss: {loss:.4f}")
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Loss: {epoch_loss / len(batched_data)}")
         scheduler.step()
-        eval_acc = evaluate(epoch, tokenizer, model)
+        eval_acc = evaluate(epoch, tokenizer, model, model_polish)
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Eval_Acc: {eval_acc}")
         if eval_acc > best_acc:
             best_acc = eval_acc

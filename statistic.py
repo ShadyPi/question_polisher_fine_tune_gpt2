@@ -63,7 +63,9 @@ if __name__ == '__main__':
                 if eligible(base_score, best_score, polished_score):
                     print(base_score, polished_score)
                     max_len = max(max_len, len(polished['question']))
-                    training_set.append({'base': base_question, 'polished': polished['question']})
+                    new_data = {'base': base_question, 'polished': polished['question']}
+                    if new_data not in training_set:
+                        training_set.append(new_data)
 
     print('dataset_size:', len(training_set))
     print('longest_question:', max_len)
