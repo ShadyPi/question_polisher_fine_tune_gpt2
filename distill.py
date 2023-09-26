@@ -170,6 +170,7 @@ if __name__ == '__main__':
             print(f"Step {step}/{len(batched_data)} - Loss: {loss:.4f}")
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Loss: {epoch_loss / len(batched_data)}")
         scheduler.step()
+        model.eval()
         eval_acc = evaluate(epoch, tokenizer, model)
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Eval_Acc: {eval_acc}")
         if eval_acc > best_acc:
