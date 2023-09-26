@@ -66,7 +66,7 @@ def model_polish(tokenizer, model, text):
         polished_ids = model.generate(
             input_ids=input_ids,
             do_sample=True,
-            max_length=2*input_ids.size(-1),
+            max_length=3*input_ids.size(-1),
             temperature=0.7,
             top_k=50,
             top_p=0.95,
@@ -74,6 +74,7 @@ def model_polish(tokenizer, model, text):
         )
         print('input_ids:', input_ids)
         print('output_ids:', polished_ids)
+        print('input', polished_ids[input_ids.size(-1):])
         polished_text = tokenizer.decode(
             polished_ids[input_ids.size(-1):],
             skip_special_tokens=True,
@@ -159,6 +160,7 @@ if __name__ == '__main__':
     tokenizer = transformers.GPT2Tokenizer.from_pretrained(model_name)
     if tokenizer.pad_token is None:
         tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    tokenizer.pad_token = tokenizer.eos_token
     model = transformers.GPT2LMHeadModel.from_pretrained(model_name, pad_token_id=tokenizer.eos_token_id)
     model = model.to(device)
 
