@@ -44,8 +44,7 @@ def distill(tokenizer, model, data, optimizer):
     labels = data['inputs_ids'].clone().detach()
     labels[data['inputs_ids'] == tokenizer.pad_token_id] = -100
     for index, base_mask in zip(range(labels.size(0)), bases_mask):
-        print(base_mask)
-        labels[index, :base_mask.sum()] = torch.tensor([-100 for i in range(bases_mask.sum())]).to(device)
+        labels[index, :base_mask.sum()] = torch.tensor([-100 for i in range(base_mask.sum())]).to(device)
     labels = labels.to(device, dtype=torch.long)
     outputs = model(input_ids=ids, attention_mask=mask, labels=labels)
     loss = outputs.loss
