@@ -10,7 +10,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def batch_encode(params, batch_data, tokenizer):
     inputs = [base + ' ' + polished for base, polished in batch_data]
-    print(inputs[0])
+    # print(inputs[0])
     inputs = tokenizer.batch_encode_plus(
         inputs,
         max_length=params['MAX_INPUT_KG_LENGTH'],
@@ -20,7 +20,7 @@ def batch_encode(params, batch_data, tokenizer):
         return_tensors='pt',
     )
     bases = [base for base, polished in batch_data]
-    print(bases[0])
+    # print(bases[0])
     bases = tokenizer.batch_encode_plus(
         bases,
         max_length=params['MAX_INPUT_KG_LENGTH'],
@@ -66,12 +66,13 @@ def model_polish(tokenizer, model, text):
         polished_ids = model.generate(
             input_ids=input_ids,
             do_sample=True,
-            max_length=50 + input_ids.size(-1),
+            max_length=2*input_ids.size(-1),
             temperature=0.7,
             top_k=50,
             top_p=0.95,
             repetition_penalty=1.2,
         )
+        print(input_ids.size(-1), polished_ids.size(-1))
         polished_text = tokenizer.decode(
             polished_ids[input_ids.size(-1):],
             skip_special_tokens=True,
