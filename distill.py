@@ -60,7 +60,7 @@ def model_polish(tokenizer, model, text):
     model.eval()
     with torch.no_grad():
         input_ids = tokenizer.encode(text, return_tensors='pt').to(device)
-        print(input_ids.size(-1))
+        print(input_ids.size(0), input_ids.size(-1))
         polished_ids = model.generate(
             input_ids=input_ids,
             do_sample=True,
