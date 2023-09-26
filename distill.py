@@ -28,24 +28,25 @@ def batch_encode(params, batch_data, tokenizer):
         return_tensors='pt',
     )
     return {
-        'inputs_ids': inputs['input_ids'],
-        'inputs_mask': inputs['attention_mask'],
-        'bases_ids': bases['input_ids'],
-        'bases_mask': bases['attention_mask'],
+        'inputs_ids': inputs['input_ids'].to(dtype=torch.long),
+        'inputs_mask': inputs['attention_mask'].to(dtype=torch.long),
+        'bases_ids': bases['input_ids'].to(dtype=torch.long),
+        'bases_mask': bases['attention_mask'].to(dtype=torch.long),
     }
 
 
 def distill(tokenizer, model, data, optimizer):
     model.train()
-    ids = data['inputs_ids'].to(device)
+    optimizer.zero_grad()
+    ids = data['inputs_ids'].to(device, dtype=torch.long)
     ids[data['inputs_ids'] == tokenizer.pad_token_id] = 0
-    mask = data['inputs_mask'].to(device)
-    bases_mask = data['bases_mask'].to(device)
+    mask = data['inputs_mask'].to(device, dtype=torch.long)
+    bases_mask = data['bases_mask'].to(device, dtype=torch.long)
     labels = data['inputs_ids'].clone().detach()
     labels[data['inputs_ids'] == tokenizer.pad_token_id] = -100
     for index, base_mask in zip(range(labels.size(0)), bases_mask):
         labels[index, :base_mask.sum()] = torch.tensor([-100 for i in range(base_mask.sum())]).to(device)
-    labels = labels.to(device)
+    labels = labels.to(device, dtype=torch.long)
     outputs = model(input_ids=ids, attention_mask=mask, labels=labels)
     loss = outputs.loss
     optimizer.zero_grad()
