@@ -57,8 +57,10 @@ def distill(tokenizer, model, data, optimizer):
 
 
 def model_polish(tokenizer, model, text):
+    model.eval()
     with torch.no_grad():
         input_ids = tokenizer.encode(text, return_tensors='pt').to(device)
+        print(input_ids.size)
         polished_ids = model.generate(
             input_ids=input_ids,
             do_sample=True,
@@ -171,7 +173,6 @@ if __name__ == '__main__':
             print(f"Step {step}/{len(batched_data)} - Loss: {loss:.4f}")
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Loss: {epoch_loss / len(batched_data)}")
         scheduler.step()
-        model.eval()
         eval_acc = evaluate(epoch, tokenizer, model)
         print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Eval_Acc: {eval_acc}")
         if eval_acc > best_acc:
