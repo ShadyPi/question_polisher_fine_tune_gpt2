@@ -115,7 +115,7 @@ def evaluate(epoch, tokenizer, model):
         if dataset == 'GSM8K':
             with open(r'./augmentation/demo.txt', 'r') as f:
                 demo = f.read()
-            queries = [query_assemble.score_GSM8K(demo, model_polish(tokenizer, model, item['question'])) for item in data]
+            queries = [query_assemble.score_GSM8K(demo, model_polish(tokenizer, model, formulate(item['question']))) for item in data]
         results = llm.async_query(test_config, queries)
         correct = 0
         for index in range(len(data)):
