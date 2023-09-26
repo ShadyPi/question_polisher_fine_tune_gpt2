@@ -12,7 +12,7 @@ def batch_encode(params, batch_data, tokenizer):
     inputs = [base + ' ' + polished for base, polished in batch_data]
     inputs = tokenizer.batch_encode_plus(
         inputs,
-        max_length=model_params['MAX_INPUT_KG_LENGTH'],
+        max_length=params['MAX_INPUT_KG_LENGTH'],
         pad_to_max_length=True,
         truncation=True,
         padding='max_length',
@@ -21,7 +21,7 @@ def batch_encode(params, batch_data, tokenizer):
     bases = [base for base, polished in batch_data]
     bases = tokenizer.batch_encode_plus(
         bases,
-        max_length=model_params['MAX_INPUT_KG_LENGTH'],
+        max_length=params['MAX_INPUT_KG_LENGTH'],
         pad_to_max_length=True,
         truncation=True,
         padding='max_length',
@@ -60,7 +60,7 @@ def model_polish(tokenizer, model, text):
     model.eval()
     with torch.no_grad():
         input_ids = tokenizer.encode(text, return_tensors='pt').to(device)
-        print(input_ids.size)
+        print(input_ids.size(-1))
         polished_ids = model.generate(
             input_ids=input_ids,
             do_sample=True,
