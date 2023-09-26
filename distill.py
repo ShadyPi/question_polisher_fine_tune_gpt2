@@ -8,8 +8,12 @@ import numpy as np
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+def formulate(base):
+    return 'A more answerable version of question \"' + base + '\" is '
+
+
 def batch_encode(params, batch_data, tokenizer):
-    inputs = [base + ' ' + polished for base, polished in batch_data]
+    inputs = [formulate(base)+'\"'+polished+'\"' for base, polished in batch_data]
     # print(inputs[0])
     inputs = tokenizer.batch_encode_plus(
         inputs,
@@ -19,7 +23,7 @@ def batch_encode(params, batch_data, tokenizer):
         padding='max_length',
         return_tensors='pt',
     )
-    bases = [base for base, polished in batch_data]
+    bases = [formulate(base) for base, polished in batch_data]
     # print(bases[0])
     bases = tokenizer.batch_encode_plus(
         bases,
