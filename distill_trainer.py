@@ -37,7 +37,7 @@ def model_polish(generator, text):
 
 if __name__ == '__main__':
     model_params = {
-        "TRAIN_BATCH_SIZE": 64,  # batch size within each alternative training loop
+        "TRAIN_BATCH_SIZE": 4,  # batch size within each alternative training loop
         "TRAIN_EPOCHS": 10,  # number of training epochs
         "LEARNING_RATE_KG": 1e-5,  # learning rate
         "LEARNING_RATE_INF": 1e-5,  # learning rate
