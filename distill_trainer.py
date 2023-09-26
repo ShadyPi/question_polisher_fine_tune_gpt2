@@ -26,7 +26,6 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
         args=training_args,
         data_collator=data_collator,
         train_dataset=train_dataset,
-        prediction_loss_only=True
     )
     trainer.train()
     trainer.save_model()
