@@ -30,7 +30,7 @@ def batch_encode(params, batch_data, tokenizer):
     return {
         'inputs_ids': inputs['input_ids'].to(dtype=torch.long),
         'inputs_mask': inputs['attention_mask'].to(dtype=torch.long),
-        'bases_ids': bases['inputs_ids'].to(dtype=torch.long),
+        'bases_ids': bases['input_ids'].to(dtype=torch.long),
         'bases_mask': bases['attention_mask'].to(dtype=torch.long),
     }
 
