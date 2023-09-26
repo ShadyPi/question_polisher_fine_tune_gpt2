@@ -72,7 +72,8 @@ def model_polish(tokenizer, model, text):
             top_p=0.95,
             repetition_penalty=1.2,
         )
-        print(input_ids.size(-1), polished_ids.size(-1))
+        print('input_ids:', input_ids)
+        print('output_ids:', polished_ids)
         polished_text = tokenizer.decode(
             polished_ids[input_ids.size(-1):],
             skip_special_tokens=True,
