@@ -1,0 +1,36 @@
+{
+    "base_question": {
+        "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+        "score": 0.95
+    },
+    "best_question": {
+        "question": "Julie is reading a 120-page book. Yesterday, she read 12 pages and today she read 24 pages. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+        "score": 1.0
+    },
+    "log": [
+        [
+            {
+                "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+                "score": 0.95
+            }
+        ],
+        [
+            {
+                "question": "Julie is reading a 120-page book. Yesterday, she read 12 pages and today she read 24 pages. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+                "score": 1.0
+            },
+            {
+                "question": "Yesterday, Julie read 12 pages of a 120-page book. Today, she read twice as many pages as yesterday. Tomorrow, she wants to read half of the remaining pages. How many pages should she read?",
+                "score": 1.0
+            },
+            {
+                "question": "Question: Julie is reading a 120-page book. Yesterday, she read 12 pages and today, she read 24 pages. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+                "score": 1.0
+            },
+            {
+                "question": "Julie wants to read a 120-page book. Yesterday, she read 12 pages and today she read double the number of pages as yesterday. If Julie plans to read half of the remaining pages tomorrow, how many pages should she read tomorrow?",
+                "score": 1.0
+            }
+        ]
+    ]
+}

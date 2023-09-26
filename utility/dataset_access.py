@@ -1,6 +1,7 @@
 import json
 import csv
 import os
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 
 def load_json(file_path, start=None, end=None):
@@ -59,3 +60,16 @@ def save_csv(file_path, data, header=None):
         if header:
             writer.writerow(header)
         writer.writerows(data)
+
+
+def save_model(output_dir, tokenizer, model):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    model.save_pretrained(output_dir)
+    tokenizer.save_pretrained(output_dir)
+
+
+def load_model(model_dir):
+    tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
+    model = GPT2LMHeadModel.from_pretrained(model_dir)
+    return tokenizer, model

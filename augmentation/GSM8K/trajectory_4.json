@@ -1,0 +1,46 @@
+{
+    "base_question": {
+        "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+        "score": 0.65
+    },
+    "best_question": {
+        "question": "How many pages does James write in a year if he writes two 3-page letters to each of his two friends twice a week?",
+        "score": 1.0
+    },
+    "log": [
+        [
+            {
+                "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+                "score": 0.65
+            }
+        ],
+        [
+            {
+                "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+                "score": 0.65
+            },
+            {
+                "question": "Question: How many pages does James write in a year if he writes a 3-page letter to 2 different friends twice a week?",
+                "score": 0.65
+            }
+        ],
+        [
+            {
+                "question": "How many pages does James write in a year if he writes two 3-page letters to each of his two friends twice a week?",
+                "score": 1.0
+            },
+            {
+                "question": "How many pages does James write in a year if he writes 3-page letters to 2 different friends two times every week?",
+                "score": 0.7
+            },
+            {
+                "question": "Question: How many pages does James write in a year if he writes a 3-page letter to 2 different friends twice a week?",
+                "score": 0.7
+            },
+            {
+                "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+                "score": 0.65
+            }
+        ]
+    ]
+}

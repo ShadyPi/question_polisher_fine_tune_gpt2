@@ -13,7 +13,7 @@ if __name__ == '__main__':
     data_formats = config['data_formats']
     test_config = config['test_config']
     start_point, end_point = config['start_point'], config['end_point']
-    part = 'train'
+    part = 'test'
     if start_point < 0:
         start_point = None
     if end_point < 0:

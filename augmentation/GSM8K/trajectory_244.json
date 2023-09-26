@@ -1,0 +1,54 @@
+{
+    "base_question": {
+        "question": "A fox can run at the maximum speed of 50 kilometers per hour. Considering the fox would run at a constant speed, what distance would he make during 120 minutes?",
+        "score": 0.2
+    },
+    "best_question": {
+        "question": "Question: If a fox runs for 120 minutes at a constant speed of 50 kilometers per hour, how far will it travel?",
+        "score": 0.95
+    },
+    "log": [
+        [
+            {
+                "question": "A fox can run at the maximum speed of 50 kilometers per hour. Considering the fox would run at a constant speed, what distance would he make during 120 minutes?",
+                "score": 0.2
+            }
+        ],
+        [
+            {
+                "question": "How far could a fox run if it runs at a constant speed of 50 kilometers per hour for 120 minutes?",
+                "score": 0.45
+            },
+            {
+                "question": "Question: If a fox runs at a constant speed of 50 kilometers per hour, how far will it run in 120 minutes?",
+                "score": 0.25
+            },
+            {
+                "question": "Question: If a fox runs at a constant speed of 50 kilometers per hour, how far will it travel in 120 minutes?",
+                "score": 0.2
+            },
+            {
+                "question": "A fox can run at the maximum speed of 50 kilometers per hour. Considering the fox would run at a constant speed, what distance would he make during 120 minutes?",
+                "score": 0.2
+            }
+        ],
+        [
+            {
+                "question": "Question: If a fox runs for 120 minutes at a constant speed of 50 kilometers per hour, how far will it travel?",
+                "score": 0.95
+            },
+            {
+                "question": "Question: What is the distance covered by a fox running at a constant speed of 50 kilometers per hour for 120 minutes?",
+                "score": 0.95
+            },
+            {
+                "question": "Question: What is the total distance covered by a fox running at a constant speed of 50 kilometers per hour for 120 minutes?",
+                "score": 0.95
+            },
+            {
+                "question": "Question: What is the total distance a fox could run if it maintains a constant speed of 50 kilometers per hour for 120 minutes?",
+                "score": 0.95
+            }
+        ]
+    ]
+}

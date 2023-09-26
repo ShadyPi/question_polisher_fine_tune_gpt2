@@ -1,0 +1,54 @@
+{
+    "base_question": {
+        "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+        "score": 0.2
+    },
+    "best_question": {
+        "question": "What is Weng's earnings for a 50-minute babysitting session if she earns $12 per hour?",
+        "score": 0.8
+    },
+    "log": [
+        [
+            {
+                "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+                "score": 0.2
+            }
+        ],
+        [
+            {
+                "question": "Yesterday, Weng did 50 minutes of babysitting. If she earns $12 an hour, how much did she earn yesterday?",
+                "score": 0.8
+            },
+            {
+                "question": "Question: Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. What is her earnings for yesterday's session?",
+                "score": 0.6
+            },
+            {
+                "question": "Question: Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn yesterday?",
+                "score": 0.5
+            },
+            {
+                "question": "Question: Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. What is her earnings for that period?",
+                "score": 0.45
+            }
+        ],
+        [
+            {
+                "question": "What is Weng's earnings for a 50-minute babysitting session if she earns $12 per hour?",
+                "score": 0.8
+            },
+            {
+                "question": "Yesterday, Weng did 50 minutes of babysitting. If she earns $12 an hour, how much did she earn yesterday?",
+                "score": 0.8
+            },
+            {
+                "question": "Question: Weng earns $12 per hour for babysitting. Yesterday, she babysat for 50 minutes. How much did she earn yesterday?",
+                "score": 0.65
+            },
+            {
+                "question": "Question: Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. What is her earnings for yesterday?",
+                "score": 0.65
+            }
+        ]
+    ]
+}

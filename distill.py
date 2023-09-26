@@ -1,114 +1,179 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
-from transformers import GPT2Model, GPT2Tokenizer
+import transformers
+import yaml
 
-# Step 1: Prepare the data
-train_data = [("What is the capital of France?", "Paris"), ("Who wrote Harry Potter?", "J.K. Rowling")]
-validation_data = [("What is the largest planet in our solar system?", "Jupiter"),
-                   ("Who painted the Mona Lisa?", "Leonardo da Vinci")]
-test_data = [("What is the square root of 16?", "4"), ("What is the chemical symbol for gold?", "Au")]
-
-# Step 3: Load the pre-trained GPT-2 model
-model_name = 'gpt2'
-tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-model = GPT2Model.from_pretrained(model_name)
-
-
-# Step 5: Prepare the data for fine-tuning
-class QADataset(Dataset):
-    def __init__(self, data):
-        self.data = data
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, index):
-        question, answer = self.data[index]
-        encoded = tokenizer.encode_plus(question, answer, add_special_tokens=True, max_length=512,
-                                        pad_to_max_length=True, return_attention_mask=True, truncation=True)
-        input_ids = torch.tensor(encoded['input_ids'])
-        attention_mask = torch.tensor(encoded['attention_mask'])
-        label = torch.tensor(tokenizer.encode(answer)[1:-1])  # Exclude the start-of-sequence and end-of-sequence tokens
-        return input_ids, attention_mask, label
-
-
-train_dataset = QADataset(train_data)
-validation_dataset = QADataset(validation_data)
-
-
-# Step 6: Define the fine-tuning model
-class QuestionAnsweringModel(torch.nn.Module):
-    def __init__(self, gpt2_model):
-        super(QuestionAnsweringModel, self).__init__()
-        self.gpt2 = gpt2_model
-        self.classification_layer = torch.nn.Linear(gpt2_model.config.hidden_size,
-                                                    2)  # Adjust the number of units based on the number of answer options
-
-    def forward(self, input_ids, attention_mask):
-        outputs = self.gpt2(input_ids=input_ids, attention_mask=attention_mask)[0]
-        logits = self.classification_layer(outputs[:, 0, :])  # Use the first token's representation for classification
-        return logits
-
-
-model = QuestionAnsweringModel(model)
-
-# Step 7: Fine-tune the model
-epochs = 5
-batch_size = 4
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
-loss_fn = torch.nn.CrossEntropyLoss()
-
-train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-validation_dataloader = DataLoader(validation_dataset, batch_size=batch_size)
+from utility import dataset_access, query_assemble, llm, metrics
+import numpy as np
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
 
-for epoch in range(epochs):
-    print(f"Epoch {epoch + 1}/{epochs}")
+
+def batch_encode(params, batch_data, tokenizer):
+    inputs = [base + ' ' + polished for base, polished in batch_data]
+    inputs = tokenizer.batch_encode_plus(
+        inputs,
+        max_length=model_params['MAX_INPUT_KG_LENGTH'],
+        pad_to_max_length=True,
+        truncation=True,
+        padding='max_length',
+        return_tensors='pt',
+    )
+    bases = [base for base, polished in batch_data]
+    bases = tokenizer.batch_encode_plus(
+        bases,
+        max_length=model_params['MAX_INPUT_KG_LENGTH'],
+        pad_to_max_length=True,
+        truncation=True,
+        padding='max_length',
+        return_tensors='pt',
+    )
+    return {
+        'inputs_ids': inputs['input_ids'].to(dtype=torch.long),
+        'inputs_mask': inputs['attention_mask'].to(dtype=torch.long),
+        'bases_ids': bases['inputs_ids'].to(dtype=torch.long),
+        'bases_mask': bases['attention_mask'].to(dtype=torch.long),
+    }
+
+
+def distill(tokenizer, model, data, optimizer):
     model.train()
-    for step, batch in enumerate(train_dataloader):
-        input_ids, attention_mask, labels = batch
-        input_ids = input_ids.to(device)
-        attention_mask = attention_mask.to(device)
-        labels = labels.to(device)
-        optimizer.zero_grad()
-        logits = model(input_ids, attention_mask)
-        loss = loss_fn(logits, labels)
-        loss.backward()
-        optimizer.step()
-        if step % 10 == 0:
-            print(f"Step {step}/{len(train_dataloader)} - Loss: {loss.item():.4f}")
+    ids = data['inputs_ids'].to(device, dtype=torch.long)
+    ids[data['inputs_ids'] == tokenizer.pad_token_id] = 0
+    mask = data['inputs_mask'].to(device, dtype=torch.long)
+    bases_mask = data['bases_mask'].to(device, dtype=torch.long)
+    labels = data['inputs_ids'].clone().detach()
+    labels[data['inputs_ids'] == tokenizer.pad_token_id] = -100
+    for index, base_mask in zip(range(labels.size(0)), bases_mask):
+        labels[index, :base_mask.sum()] = torch.tensor([-100 for i in range(bases_mask.sum())])
+    labels = labels.to(device, dtype=torch.long)
+    outputs = model(input_ids=ids, attention_mask=mask, labels=labels)
+    loss = outputs.loss
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
 
-    # Validation
-    model.eval()
-    val_loss = []
+    return loss.item()
+
+
+def model_polish(tokenizer, model, text):
     with torch.no_grad():
-        for val_batch in validation_dataloader:
-            val_input_ids, val_attention_mask, val_labels = val_batch
-            val_input_ids = val_input_ids.to(device)
-            val_attention_mask = val_attention_mask.to(device)
-            val_labels = val_labels.to(device)
-            val_logits = model(val_input_ids, val_attention_mask)
-            val_loss.extend(loss_fn(val_logits, val_labels).item())
+        input_ids = tokenizer.encode(text, return_tensors='pt').to(device)
+        polished_ids = model.generate(
+            input_ids=input_ids,
+            do_sample=True,
+            max_length=50 + input_ids.size(-1),
+            temperature=0.7,
+            top_k=50,
+            top_p=0.95,
+            repetition_penalty=1.2,
+            early_stopping=True
+        )
+        polished_text = tokenizer.decode(
+            polished_ids[input_ids.size(-1):],
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=True
+        )
+        return polished_text
 
-    print(f"Validation Loss: {torch.mean(torch.tensor(val_loss)):.4f}")
 
-# Step 9: Test the model
-test_dataset = QADataset(test_data)
-test_dataloader = DataLoader(test_dataset, batch_size=batch_size)
-model.eval()
-test_loss = []
-with torch.no_grad():
-    for test_batch in test_dataloader:
-        test_input_ids, test_attention_mask, test_labels = test_batch
-        test_input_ids = test_input_ids.to(device)
-        test_attention_mask = test_attention_mask.to(device)
-        test_labels = test_labels.to(device)
-        test_logits = model(test_input_ids, test_attention_mask)
-        test_loss.extend(loss_fn(test_logits, test_labels).item())
+def evaluate(epoch, tokenizer, model):
+    raw_datasets_path = r'./raw_datasets/'
+    results_path = r'./polished_test_results/'
+    config_path = results_path + 'config.yaml'
+    with open(config_path, 'r') as config_file:
+        config = yaml.load(config_file, Loader=yaml.SafeLoader)
+    raw_datasets = config['raw_datasets']
+    data_formats = config['data_formats']
+    test_config = config['test_config']
+    start_point, end_point = config['start_point'], config['end_point']
+    part = 'test'
+    if start_point < 0:
+        start_point = None
+    if end_point < 0:
+        end_point = None
 
-print(f"Test Loss: {torch.mean(torch.tensor(test_loss)):.4f}")
+    for dataset in raw_datasets:
+        assert dataset in data_formats.keys(), 'Data format not defined!'
+        assert data_formats[dataset] in ['jsonl', 'json'], 'Invalid data format'
+        raw_dataset_path = raw_datasets_path + dataset + '/' + part + '.' + data_formats[dataset]
+        save_path = results_path+dataset+'/results_'+part+'_'+str(start_point)+'_'+str(end_point)+'_'+epoch+'.jsonl'
+        if data_formats[dataset] == 'jsonl':
+            data = dataset_access.load_jsonl(raw_dataset_path, start_point, end_point)
+        else:
+            data = dataset_access.load_json(raw_dataset_path, start_point, end_point)
+        if dataset == 'GSM8K':
+            with open(r'./augmentation/demo.txt', 'r') as f:
+                demo = f.read()
+            queries = [query_assemble.score_GSM8K(demo, model_polish(tokenizer, model, item['question'])) for item in data]
+        results = llm.async_query(test_config, queries)
+        correct = 0
+        for index in range(len(data)):
+            answer = int(data[index]['answer'].split('####')[1].replace(',', ''))
+            output = metrics.clean_response(dataset, results[index][0])
+            data[index]['polished'] = queries[index]
+            data[index]['answer'] = answer
+            data[index]['output'] = output
+            data[index]['full_response'] = results[index][0]
+            correct += (answer == output)
+            # print(results[index][0])
+            # print(answer, output)
+        dataset_access.save_jsonl(save_path, data)
+        return correct / len(data)
 
-# Step 10: Deploy and use the model
-# You can save the fine-tuned model using torch.save() and use it for inference on new question-answering tasks.
+
+if __name__ == '__main__':
+    model_name = 'gpt2'
+    model_params = {
+        "TRAIN_BATCH_SIZE": 16,  # batch size within each alternative training loop
+        "TRAIN_EPOCHS": 10,  # number of training epochs
+        "LEARNING_RATE_KG": 1e-5,  # learning rate
+        "LEARNING_RATE_INF": 1e-5,  # learning rate
+        "MAX_INPUT_KG_LENGTH": 150,  # max length of all input text
+        "MAX_SOURCE_KG_LENGTH": 80,  # max length of input question
+        "MAX_TARGET_KG_LENGTH": 50,  # max length of target knowledge
+        "MAX_SOURCE_INF_LENGTH": 150,  # max length of all input text
+        "MAX_TARGET_INF_LENGTH": 10,  # max length of output answer text
+        "SEED": 42,  # set seed for reproducibility
+    }
+    output_dir = r'./distilledGPT/'
+
+    # Prepare the data
+    data_path = r'./augmentation/GSM8K/training_data.jsonl'
+    raw_data = dataset_access.load_jsonl(data_path)
+    train_data = []
+    for item in raw_data:
+        train_data.append((item['base'], item['polished']))
+    torch.manual_seed(model_params["SEED"])  # pytorch random seed
+    np.random.seed(model_params["SEED"])  # numpy random seed
+    np.random.shuffle(train_data)
+    batched_data = [train_data[i: i + model_params['TRAIN_BATCH_SIZE']] for i in
+                    range(0, len(train_data), model_params['TRAIN_BATCH_SIZE'])]
+
+    # Load the pre-trained GPT-2 model
+    tokenizer = transformers.GPT2Tokenizer.from_pretrained(model_name)
+    if tokenizer.pad_token is None:
+        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    model = transformers.GPT2LMHeadModel.from_pretrained(model_name, pad_token_id=tokenizer.eos_token_id)
+    model = model.to(device)
+
+    # Fine-tune the model
+    optimizer = torch.optim.Adam(params=model.parameters(), lr=model_params["LEARNING_RATE_KG"])
+    scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.98)
+    model.to(device)
+
+    best_acc = 0
+    for epoch in range(model_params['TRAIN_EPOCHS']):
+        epoch_loss = 0
+        for step, batch in enumerate(batched_data):
+            encoded_data = batch_encode(model_params, batch, tokenizer)
+            loss = distill(tokenizer, model, encoded_data, optimizer)
+            epoch_loss += loss
+            print(f"Step {step}/{len(batched_data)} - Loss: {loss:.4f}")
+        print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Loss: {epoch_loss / len(batched_data)}")
+        scheduler.step()
+        eval_acc = evaluate(epoch, tokenizer, model)
+        print(f"Epoch {epoch + 1}/{model_params['TRAIN_EPOCHS']} - Eval_Acc: {eval_acc}")
+        if eval_acc > best_acc:
+            best_acc = eval_acc
+            model_dir = output_dir+'epoch'+str(epoch)
+            dataset_access.save_model(model_dir, tokenizer, model)

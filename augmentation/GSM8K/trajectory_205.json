@@ -1,0 +1,54 @@
+{
+    "base_question": {
+        "question": "Wickham is throwing a huge Christmas party. He invites 30 people. Everyone attends the party, and half of the guests bring a plus one (one other person). He plans to serve a 3-course meal for the guests. If he uses a new plate for every course, how many plates does he need in total for his guests?",
+        "score": 0.8
+    },
+    "best_question": {
+        "question": "How many plates does Wickham need for his Christmas party if he invites 30 people, half of them bring a guest, and he plans to serve a 3-course meal using a new plate for each course?",
+        "score": 1.0
+    },
+    "log": [
+        [
+            {
+                "question": "Wickham is throwing a huge Christmas party. He invites 30 people. Everyone attends the party, and half of the guests bring a plus one (one other person). He plans to serve a 3-course meal for the guests. If he uses a new plate for every course, how many plates does he need in total for his guests?",
+                "score": 0.8
+            }
+        ],
+        [
+            {
+                "question": "How many plates does Wickham need in total for his guests if he invites 30 people to his Christmas party, and half of the guests bring a plus one, and he plans to serve a 3-course meal using a new plate for every course?",
+                "score": 1.0
+            },
+            {
+                "question": "How many plates does Wickham need for his Christmas party if he invites 30 people and half of them bring a plus one, and he plans to serve a 3-course meal?",
+                "score": 0.95
+            },
+            {
+                "question": "How many plates does Wickham need for his Christmas party if he invites 30 people and half of them bring a plus one, and he plans to serve a 3-course meal using a new plate for each course?",
+                "score": 0.95
+            },
+            {
+                "question": "How many plates does Wickham need in total for his Christmas party if he invites 30 people and half of them bring a plus one, and he plans to serve a 3-course meal using a new plate for each course?",
+                "score": 0.95
+            }
+        ],
+        [
+            {
+                "question": "How many plates does Wickham need for his Christmas party if he invites 30 people, half of them bring a guest, and he plans to serve a 3-course meal using a new plate for each course?",
+                "score": 1.0
+            },
+            {
+                "question": "How many total plates does Wickham need for his Christmas party if he invites 30 people, half of them bring a guest, and he plans to serve a 3-course meal with a new plate for each course?",
+                "score": 1.0
+            },
+            {
+                "question": "Question: How many plates does Wickham need for his Christmas party if he invites 30 people and half of them bring a plus one, and he plans to serve a 3-course meal using a new plate for every course?",
+                "score": 1.0
+            },
+            {
+                "question": "How many plates does Wickham need in total for his guests if he invites 30 people to his Christmas party, and half of the guests bring a plus one, and he plans to serve a 3-course meal using a new plate for every course?",
+                "score": 1.0
+            }
+        ]
+    ]
+}
