@@ -10,7 +10,10 @@ def delete_extra_zero(n):
             n = int(n[:-1])
         else:
             frac = n.split('/')
-            n = int(frac[0])/int(frac[1])
+            try:
+                n = int(frac[0])/int(frac[1])
+            except:
+                return -20021016
         return n
     if isinstance(n, int):
         return str(n)
