@@ -7,12 +7,14 @@ from utility import dataset_access
 augmentation_path = r'./augmentation/'
 
 
-def eligible(base, now):
+def eligible(base, best, now):
     if now <= base:
         return False
     if now <= 0.7 and now-base < 0.4:
         return False
     if now-base <= 0.05:
+        return False
+    if best-now >= 0.2:
         return False
     return True
 
@@ -51,14 +53,14 @@ if __name__ == '__main__':
     for item in item_list:
         base_score = item['base_question']['score']
         best_score = item['best_question']['score']
-        if not eligible(base_score, best_score):
+        if not eligible(base_score, best_score, best_score):
             continue
         base_question = item['base_question']['question']
         max_len = max(max_len, len(base_question))
         for step in item['log']:
             for polished in step:
                 polished_score = polished['score']
-                if eligible(base_score, polished_score):
+                if eligible(base_score, best_score, polished_score):
                     print(base_score, polished_score)
                     max_len = max(max_len, len(polished['question']))
                     training_set.append({'base': base_question, 'polished': polished['question']})
