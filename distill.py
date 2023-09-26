@@ -66,7 +66,6 @@ def model_polish(tokenizer, model, text):
             top_k=50,
             top_p=0.95,
             repetition_penalty=1.2,
-            early_stopping=True
         )
         polished_text = tokenizer.decode(
             polished_ids[input_ids.size(-1):],
@@ -124,7 +123,7 @@ def evaluate(epoch, tokenizer, model):
 if __name__ == '__main__':
     model_name = 'gpt2'
     model_params = {
-        "TRAIN_BATCH_SIZE": 16,  # batch size within each alternative training loop
+        "TRAIN_BATCH_SIZE": 64,  # batch size within each alternative training loop
         "TRAIN_EPOCHS": 10,  # number of training epochs
         "LEARNING_RATE_KG": 1e-5,  # learning rate
         "LEARNING_RATE_INF": 1e-5,  # learning rate
