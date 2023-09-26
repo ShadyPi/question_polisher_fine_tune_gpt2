@@ -96,7 +96,7 @@ def evaluate(epoch, tokenizer, model):
         assert dataset in data_formats.keys(), 'Data format not defined!'
         assert data_formats[dataset] in ['jsonl', 'json'], 'Invalid data format'
         raw_dataset_path = raw_datasets_path + dataset + '/' + part + '.' + data_formats[dataset]
-        save_path = results_path+dataset+'/results_'+part+'_'+str(start_point)+'_'+str(end_point)+'_'+epoch+'.jsonl'
+        save_path = results_path+dataset+'/results_'+part+'_'+str(start_point)+'_'+str(end_point)+'_'+str(epoch)+'.jsonl'
         if data_formats[dataset] == 'jsonl':
             data = dataset_access.load_jsonl(raw_dataset_path, start_point, end_point)
         else:
