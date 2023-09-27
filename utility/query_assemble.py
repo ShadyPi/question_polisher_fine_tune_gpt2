@@ -1,7 +1,7 @@
 from string import Template
 
 
-instruction = 'Please rewrite the following question to make it easier to solve.\n\n'
+rewrite_instruction = 'Please rewrite the following question to make it easier to solve.\n\n'
 
 
 def augment_GSM8K(question):
@@ -10,7 +10,7 @@ def augment_GSM8K(question):
     fill = {'question': question}
     query = query_template.substitute(fill)
 
-    return instruction+query
+    return rewrite_instruction+query
 
 
 def score_GSM8K(demo, question):
@@ -22,3 +22,21 @@ def score_GSM8K(demo, question):
     query = query_template.substitute(fill)
 
     return demo+query
+
+
+def polish_query(demo_base, demo_polished, text):
+    instruction = 'The following exemplars show how to rewrite question to make it easier to solve:\n\n${demos}' \
+                  'Now please rewrite the following question:\n\n' \
+                  '[Original]\n${base_text}\n' \
+                  '[New]\n'
+    demo_temp = '[Original]\n${base_text}\n' \
+                '[New]\n${polished_text}\n\n'
+    instruction = Template(instruction)
+    demo_temp = Template(demo_temp)
+    demo_text = ''
+    for i in range(len(demo_base)):
+        demo_item = demo_temp.substitute({'base_text': demo_base[i], 'polished_text': demo_polished[i]})
+        demo_text += demo_item
+    fill = {'demos': demo_text, 'base_text': text}
+    query = instruction.substitute(fill)
+    return query
