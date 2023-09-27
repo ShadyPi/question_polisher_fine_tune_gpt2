@@ -16,6 +16,7 @@ if __name__ == '__main__':
     tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
     model = GPT2LMHeadModel.from_pretrained(model_dir)
     generator = pipeline('text-generation', model=model, tokenizer=tokenizer, max_length=256)
+
     test_data_path = r'./raw_datasets/GSM8K/test.jsonl'
     results_path = r'./polished_test_results/'
     config_path = results_path + 'config.yaml'
@@ -31,13 +32,14 @@ if __name__ == '__main__':
     if end_point < 0:
         end_point = None
     test_data = dataset_access.load_jsonl(test_data_path, start_point, end_point)
-    queries = [query_assemble.score_GSM8K('', item['question']) for item in test_data]
+    queries = [query_assemble.score_GSM8K('', model_polish(generator, item['question'])) for item in test_data]
     results = llm.async_query(test_config, queries)
     print(len(results))
     correct = 0
     for index in range(len(test_data)):
         answer = int(test_data[index]['answer'].split('####')[1].replace(',', ''))
         output = metrics.clean_response(dataset, results[index][0])
+        test_data[index]['polished'] = queries[index]
         test_data[index]['answer'] = answer
         test_data[index]['output'] = output
         test_data[index]['full_response'] = results[index][0]
