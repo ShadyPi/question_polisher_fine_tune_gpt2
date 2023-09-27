@@ -28,7 +28,9 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
         train_dataset=train_dataset,
     )
     trainer.train()
-    trainer.save_model(output_dir)
+    # trainer.save_model(output_dir)
+    model.save_pretrained(output_dir)
+    tokenizer.save_pretrained(output_dir)
 
 
 def model_polish(generator, text):
