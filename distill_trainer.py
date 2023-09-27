@@ -70,7 +70,7 @@ if __name__ == '__main__':
     distill_trainer(text_path, model_params['TRAIN_EPOCHS'], 'gpt2', model_params['TRAIN_BATCH_SIZE'], model_dir)
     tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
     model = GPT2LMHeadModel.from_pretrained(model_dir)
-    generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
+    generator = pipeline('text-generation', model=model, tokenizer=tokenizer, max_length=256)
     test_data_path = r'./raw_datasets/GSM8K/test.jsonl'
     test_data = dataset_access.load_jsonl(test_data_path)
     for item in test_data[0: 9]:
