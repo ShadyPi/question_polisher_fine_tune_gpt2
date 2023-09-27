@@ -20,4 +20,4 @@ if __name__ == '__main__':
     for item in test_data[0: 9]:
         print('=======================')
         print('base:', item['question'])
-        print('polished', model_polish(generator, item['question']))
+        print('polished:', model_polish(generator, item['question']))
