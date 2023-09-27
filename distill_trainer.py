@@ -34,7 +34,9 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
 
 
 def model_polish(generator, text):
-    return generator('<s>'+text+'</s>-><p>')
+    generated = generator('<s>'+text+'</s>-><p>')
+    trimmed = generated[0]['generated_text'].split('</s>-><p>')[1].split('</p>')[0]
+    return trimmed
 
 
 if __name__ == '__main__':
