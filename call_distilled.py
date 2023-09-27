@@ -30,7 +30,7 @@ if __name__ == '__main__':
         start_point = None
     if end_point < 0:
         end_point = None
-    test_data = dataset_access.load_jsonl(test_data_path)
+    test_data = dataset_access.load_jsonl(test_data_path, start_point, end_point)
     queries = [query_assemble.score_GSM8K('', item['question']) for item in test_data]
     results = llm.async_query(test_config, queries)
     print(len(results))
