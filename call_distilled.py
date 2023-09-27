@@ -18,4 +18,5 @@ if __name__ == '__main__':
     test_data_path = r'./raw_datasets/GSM8K/test.jsonl'
     test_data = dataset_access.load_jsonl(test_data_path)
     for item in test_data[0: 9]:
-        print(model_polish(generator, item['question']))
+        print('base:', item['question'])
+        print('polished', model_polish(generator, item['question']))
