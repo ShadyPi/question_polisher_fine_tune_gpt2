@@ -109,9 +109,17 @@ def async_query(LLM_config, data, system_prompt='You are a helpful assistant. Pl
         tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-xl")
         model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-xl", device_map="auto")
         answer = []
+        batch_size = LLM_config['batch_size']
+        cnt = 0
         for item in data:
+            if cnt % batch_size == 0:
+                print('Batch #{}: question {}-{}'.format(cnt/batch_size, cnt, min(cnt+batch_size-1, len(data))))
             responses = call_local_model(tokenizer, model, item, LLM_config)
-            answer.append(responses)
+            response = []
+            for ids in responses:
+                output_text = tokenizer.decode(ids)
+                response.append(output_text)
+            answer.append(response)
         return answer
 
     loop = asyncio.get_event_loop()
