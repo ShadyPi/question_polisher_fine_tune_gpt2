@@ -7,8 +7,8 @@ if __name__ == '__main__':
     raw_data_path = r'./raw_datasets/GSM8K/test.jsonl'
     raw_data = dataset_access.load_jsonl(raw_data_path, 0, 99)
 
-    tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-large")
-    model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-large", device_map="auto")
+    tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-xl")
+    model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-xl", device_map="auto")
 
     correct = 0
     for item in raw_data:
@@ -18,8 +18,8 @@ if __name__ == '__main__':
         outputs = model.generate(input_ids)
         output_text = tokenizer.decode(outputs[0])
         output_answer = metrics.clean_response(dataset, output_text)
-        raw_data['response'] = output_text
-        raw_data['output'] = output_answer
+        item['response'] = output_text
+        item['output'] = output_answer
         correct += (answer == output_answer)
     print(correct)
 
