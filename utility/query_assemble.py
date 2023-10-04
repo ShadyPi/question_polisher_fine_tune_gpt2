@@ -25,8 +25,11 @@ def score_GSM8K(demo, question):
 
 
 def polish_query(demo_base, demo_polished, text):
-    instruction = 'The following exemplars show how to rewrite question to make it easier to solve:\n\n${demos}' \
-                  'Now please rewrite the following question:\n\n' \
+    # instruction = 'The following exemplars show how to rewrite questions to make them easier:\n\n${demos}' \
+    #               'Now please rewrite the following question. Don\'t omit any useful information, especially the numbers.\n\n' \
+    #               '[Original]\n${base_text}\n' \
+    #               '[New]\n'
+    instruction = 'Now please rewrite the following question. Don\'t omit any useful information, especially the numbers.\n\n' \
                   '[Original]\n${base_text}\n' \
                   '[New]\n'
     demo_temp = '[Original]\n${base_text}\n' \
@@ -37,6 +40,7 @@ def polish_query(demo_base, demo_polished, text):
     for i in range(len(demo_base)):
         demo_item = demo_temp.substitute({'base_text': demo_base[i], 'polished_text': demo_polished[i]})
         demo_text += demo_item
-    fill = {'demos': demo_text, 'base_text': text}
+    # fill = {'demos': demo_text, 'base_text': text}
+    fill = {'base_text': text}
     query = instruction.substitute(fill)
     return query

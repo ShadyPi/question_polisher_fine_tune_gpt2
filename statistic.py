@@ -40,7 +40,8 @@ if __name__ == '__main__':
         base_score = item['base_question']['score']
         best_score = item['best_question']['score']
         gap.append([id_num, base_score, best_score, best_score - base_score])
-        if eligible(base_score, best_score, best_score) and best_score > 0.8:
+        # if eligible(base_score, best_score, best_score) and best_score > 0.9 and base_score <= 0.5:
+        if True:
             base_question = item['base_question']['question']
             best_question = item['best_question']['question']
             demos_set.append({'base': base_question, 'polished': best_question})

@@ -29,9 +29,9 @@ if __name__ == '__main__':
         else:
             data = dataset_access.load_json(raw_dataset_path, start_point, end_point)
         if dataset == 'GSM8K':
-            with open(r'./augmentation/demo.txt', 'r') as f:
+            with open(r'./test_results/empty_demo.txt', 'r') as f:
                 demo = f.read()
-            queries = [query_assemble.score_GSM8K(demo, item['question']) for item in data]
+            queries = [query_assemble.score_GSM8K(demo, item['question']+'Let\'s think step by step.\n\n') for item in data]
         results = llm.async_query(test_config, queries)
         print(len(results))
         correct = 0

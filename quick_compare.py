@@ -1,7 +1,7 @@
 from utility import dataset_access
 
-plain_test_file = r'./test_results/GSM8K/results_test_0_99.jsonl'
-polished_test_file = r'./polished_test_results/GSM8K/results_test_0_99_few_shot.jsonl'
+plain_test_file = r'./test_results/GSM8K/results_test_0_99_empty.jsonl'
+polished_test_file = r'./polished_test_results/GSM8K/results_test_0_99_few_shot_best.jsonl'
 plain = dataset_access.load_jsonl(plain_test_file)
 polished = dataset_access.load_jsonl(polished_test_file)
 total_win = 0

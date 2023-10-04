@@ -1,3 +1,5 @@
+import random
+
 import transformers
 import yaml
 from transformers import GPT2Tokenizer, GPT2LMHeadModel, pipeline
@@ -28,7 +30,9 @@ def retrieve_demo(demo_ids, tokenizer, text, demo_num):
     text_len = np.sqrt(np.sum(text_ids*text_ids))
     similarity = np.dot(text_ids, demo_ids.T)/demo_len/text_len
     idx = similarity.argsort().tolist()[0][-demo_num:]
-    return idx
+    # return random.sample(range(len(demo_ids)), demo_num)
+    return []
+    # return idx
 
 
 if __name__ == '__main__':
@@ -70,6 +74,8 @@ if __name__ == '__main__':
         end_point = None
     test_data = dataset_access.load_jsonl(test_data_path, start_point, end_point)
     polish_queries = [get_polish_query(base_texts, base_ids, polish_map, tokenizer, item['question']) for item in test_data]
+    # system_prompt = 'You are a helpful AI question rewriter. Please read the given exemplars carefully and rewrite the question.'
+    system_prompt = 'You are a helpful AI question rewriter. Please rewrite the given question.'
     polished_questions = llm.async_query(test_config, polish_queries)
     queries = [query_assemble.score_GSM8K('', item[0]) for item in polished_questions]
     results = llm.async_query(test_config, queries)

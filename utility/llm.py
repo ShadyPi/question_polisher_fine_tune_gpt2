@@ -5,10 +5,9 @@ import time
 
 # openai.api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = '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'
-system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'
 
 
-def get_response(LLM_config, text):
+def get_response(LLM_config, text, system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'):
     response = None
     while response is None:
         try:
@@ -34,7 +33,7 @@ def get_response(LLM_config, text):
             time.sleep(30)
 
 
-async def async_get_response(LLM_config, texts):
+async def async_get_response(LLM_config, texts, system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'):
     if LLM_config['model'] == 'gpt-3.5-turbo':
         messages = [
             [{'role': 'system', 'content': system_prompt},
@@ -93,9 +92,9 @@ async def async_get_response(LLM_config, texts):
         return responses
 
 
-def async_query(LLM_config, data):
+def async_query(LLM_config, data, system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
     loop = asyncio.get_event_loop()
-    responses = loop.run_until_complete(async_get_response(LLM_config, data))
+    responses = loop.run_until_complete(async_get_response(LLM_config, data, system_prompt))
     assert LLM_config['model'] in ['gpt-3.5-turbo', 'davinci-002'], 'Undefined model'
     if LLM_config['model'] == 'gpt-3.5-turbo':
         # answer = [responses[i]['choices'][0]['message']['content'] for i in range(len(responses))]
