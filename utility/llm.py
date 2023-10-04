@@ -3,6 +3,8 @@ import os
 import asyncio
 import time
 
+from transformers import T5Tokenizer, T5ForConditionalGeneration
+
 # openai.api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = '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'
 
@@ -92,7 +94,26 @@ async def async_get_response(LLM_config, texts, system_prompt = 'You are a helpf
         return responses
 
 
+def call_local_model(tokenizer, model, text, LLM_config):
+    input_ids = tokenizer(text, return_tensors="pt").input_ids.to("cuda")
+    outputs = model.generate(
+        input_ids,
+        max_length=LLM_config['max_tokens'],
+        temperature=LLM_config['temperature'],
+        num_return_sequences=LLM_config['n'],
+    )
+    return outputs
+
 def async_query(LLM_config, data, system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
+    if LLM_config['model'] == 'flan-t5':
+        tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-xl")
+        model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-xl", device_map="auto")
+        answer = []
+        for item in data:
+            responses = call_local_model(tokenizer, model, item, LLM_config)
+            answer.append(responses)
+        return answer
+
     loop = asyncio.get_event_loop()
     responses = loop.run_until_complete(async_get_response(LLM_config, data, system_prompt))
     assert LLM_config['model'] in ['gpt-3.5-turbo', 'davinci-002'], 'Undefined model'

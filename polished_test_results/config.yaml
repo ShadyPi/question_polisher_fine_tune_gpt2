@@ -3,7 +3,7 @@ data_formats:
   CSQA: jsonl
   GSM8K: jsonl
 test_config:
-  model: gpt-3.5-turbo
+  model: flan-t5
   batch_size: 32
   temperature: 1.0
   max_tokens: 512
