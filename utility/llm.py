@@ -120,6 +120,7 @@ def async_query(LLM_config, data, system_prompt='You are a helpful assistant. Pl
                 output_text = tokenizer.decode(ids)
                 response.append(output_text)
             answer.append(response)
+            cnt += 1
         return answer
 
     loop = asyncio.get_event_loop()
