@@ -21,6 +21,7 @@ if __name__ == '__main__':
         raw_data['response'] = output_text
         raw_data['output'] = output_answer
         correct += (answer == output_answer)
+    print(correct)
 
     save_path = r'./test_results/t5.jsonl'
     dataset_access.save_jsonl(save_path, raw_data)
