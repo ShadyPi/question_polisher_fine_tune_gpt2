@@ -15,7 +15,7 @@ if __name__ == '__main__':
         input_text = item['question']
         answer = int(item['answer'].split('####')[1].replace(',', ''))
         input_ids = tokenizer(input_text, return_tensors="pt").input_ids.to("cuda")
-        outputs = model.generate(input_ids)
+        outputs = model.generate(input_ids, max_new_tokens=256)
         output_text = tokenizer.decode(outputs[0])
         output_answer = metrics.clean_response(dataset, output_text)
         item['response'] = output_text
