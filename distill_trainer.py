@@ -10,7 +10,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
-    model = GPT2LMHeadModel.from_pretrained(model_name)
+    model = GPT2LMHeadModel.from_pretrained(model_name, device_map='auto')
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
     train_dataset = TextDataset(tokenizer=tokenizer, file_path=text_path, block_size=256)
