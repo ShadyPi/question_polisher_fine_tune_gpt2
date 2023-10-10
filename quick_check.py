@@ -10,6 +10,7 @@ with open(config_path, 'r') as config_file:
 raw_datasets = config['raw_datasets']
 data_formats = config['data_formats']
 test_config = config['test_config']
+model_name = test_config['model']
 
 file_path = r'./augmentation/GSM8K/demos.jsonl'
 data = dataset_access.load_jsonl(file_path)

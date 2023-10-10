@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     output_dir = r'./distilledGPT/'
     model_dir = output_dir + 'Trainer'
-    distill_trainer(text_path, model_params['TRAIN_EPOCHS'], 'gpt2', model_params['TRAIN_BATCH_SIZE'], model_dir)
+    distill_trainer(text_path, model_params['TRAIN_EPOCHS'], 'gpt2-xl', model_params['TRAIN_BATCH_SIZE'], model_dir)
     tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
     model = GPT2LMHeadModel.from_pretrained(model_dir)
     generator = pipeline('text-generation', model=model, tokenizer=tokenizer, max_length=256)

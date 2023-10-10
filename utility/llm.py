@@ -9,7 +9,8 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 openai.api_key = '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'
 
 
-def get_response(LLM_config, text, system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'):
+def get_response(LLM_config, text,
+                 system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
     response = None
     while response is None:
         try:
@@ -35,7 +36,8 @@ def get_response(LLM_config, text, system_prompt = 'You are a helpful assistant.
             time.sleep(30)
 
 
-async def async_get_response(LLM_config, texts, system_prompt = 'You are a helpful assistant. Please follow the given examples and answer the question.'):
+async def async_get_response(LLM_config, texts,
+                             system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
     if LLM_config['model'] == 'gpt-3.5-turbo':
         messages = [
             [{'role': 'system', 'content': system_prompt},
@@ -64,7 +66,8 @@ async def async_get_response(LLM_config, texts, system_prompt = 'You are a helpf
                     print("Retrying....")
                     time.sleep(30)
             responses += async_responses
-            print('Batch #{}: question {}-{}'.format(batch_num, batch_size*batch_num, min(batch_size*(batch_num+1)-1, len(messages))))
+            print('Batch #{}: question {}-{}'.format(batch_num, batch_size * batch_num,
+                                                     min(batch_size * (batch_num + 1) - 1, len(messages))))
         return responses
     elif LLM_config['model'] == 'davinci-002':
         batch_size = LLM_config['batch_size']
@@ -104,16 +107,16 @@ def call_local_model(tokenizer, model, text, LLM_config):
     )
     return outputs
 
-def async_query(LLM_config, data, system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
-    if LLM_config['model'] == 'flan-t5':
-        tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-xl")
-        model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-xl", device_map="auto")
+
+def async_query(LLM_config, data, tokenizer=None, model=None,
+                system_prompt='You are a helpful assistant. Please follow the given examples and answer the question.'):
+    if LLM_config['model'] in ['flan-t5']:
         answer = []
         batch_size = LLM_config['batch_size']
         cnt = 0
         for item in data:
             if cnt % batch_size == 0:
-                print('Batch #{}: question {}-{}'.format(cnt/batch_size, cnt, min(cnt+batch_size-1, len(data))))
+                print('Batch #{}: question {}-{}'.format(cnt / batch_size, cnt, min(cnt + batch_size - 1, len(data))))
             responses = call_local_model(tokenizer, model, item, LLM_config)
             response = []
             for ids in responses:
