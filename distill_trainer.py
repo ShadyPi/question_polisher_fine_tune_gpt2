@@ -1,4 +1,6 @@
 import os
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import numpy as np
 import torch
@@ -35,7 +37,7 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
 
 
 def model_polish(generator, text):
-    generated = generator('<s>'+text+'</s>-><p>')
+    generated = generator('<s>' + text + '</s>-><p>')
     trimmed = generated[0]['generated_text'].split('</s>-><p>')[1].split('</p>')[0]
     return trimmed
 
