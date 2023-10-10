@@ -5,6 +5,8 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, DataCollatorForLanguage
 
 from utility import dataset_access
 from distill import evaluate
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 
 def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
