@@ -10,11 +10,11 @@ augmentation_path = r'./augmentation/'
 def eligible(base, best, now):
     if now <= base:
         return False
-    if now <= 0.7 and now - base < 0.4:
+    if now <= 0.5 and now - base < 0.4:
         return False
     if now - base <= 0.05:
         return False
-    if best - now >= 0.2:
+    if best - now >= 0.3:
         return False
     return True
 
