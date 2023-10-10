@@ -1,11 +1,11 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import numpy as np
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, DataCollatorForLanguageModeling, TextDataset, \
     TrainingArguments, Trainer, pipeline
 
 from utility import dataset_access
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
