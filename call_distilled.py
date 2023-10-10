@@ -14,6 +14,7 @@ if __name__ == '__main__':
     output_dir = r'./distilledGPT/'
     model_dir = output_dir + 'Trainer'
     tokenizer = GPT2Tokenizer.from_pretrained(model_dir)
+    tokenizer.pad_token_id = tokenizer.eos_token_id
     model = GPT2LMHeadModel.from_pretrained(model_dir)
     generator = pipeline('text-generation', model=model, tokenizer=tokenizer, max_length=256)
 
@@ -32,7 +33,13 @@ if __name__ == '__main__':
     if end_point < 0:
         end_point = None
     test_data = dataset_access.load_jsonl(test_data_path, start_point, end_point)
-    queries = [query_assemble.score_GSM8K('', model_polish(generator, item['question'])) for item in test_data]
+    # queries = [query_assemble.score_GSM8K('', model_polish(generator, item['question'])) for item in test_data]
+    queries = []
+    idx = 0
+    for item in test_data:
+        print(f'Polishing #{idx} item...')
+        queries.append(query_assemble.score_GSM8K('', model_polish(generator, item['question'])))
+        idx += 1
     results = llm.async_query(test_config, queries)
     print(len(results))
     correct = 0
