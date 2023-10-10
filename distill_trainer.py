@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 import numpy as np
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, DataCollatorForLanguageModeling, TextDataset, \
