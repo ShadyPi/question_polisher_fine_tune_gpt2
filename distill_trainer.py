@@ -25,8 +25,10 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
         args=training_args,
         data_collator=data_collator,
         train_dataset=train_dataset,
+        devices=[2],
+        accelerator="gpu"
     )
-    trainer.train(devices=[2], accelerator="gpu")
+    trainer.train()
     # trainer.save_model(output_dir)
     model.save_pretrained(output_dir)
     tokenizer.save_pretrained(output_dir)
