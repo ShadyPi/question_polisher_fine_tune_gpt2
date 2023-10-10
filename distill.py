@@ -166,7 +166,7 @@ if __name__ == '__main__':
     if tokenizer.pad_token is None:
         tokenizer.add_special_tokens({'pad_token': '[PAD]'})
     tokenizer.pad_token = tokenizer.eos_token
-    model = transformers.GPT2LMHeadModel.from_pretrained(model_name, pad_token_id=tokenizer.eos_token_id)
+    model = transformers.GPT2LMHeadModel.from_pretrained(model_name, device_map='auto')
     model = model.to(device)
 
     # Fine-tune the model
