@@ -4,6 +4,9 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer, DataCollatorForLanguage
     TrainingArguments, Trainer, pipeline
 
 from utility import dataset_access
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
@@ -25,8 +28,6 @@ def distill_trainer(text_path, epochs, model_name, batch_size, output_dir):
         args=training_args,
         data_collator=data_collator,
         train_dataset=train_dataset,
-        devices=[2],
-        accelerator="gpu"
     )
     trainer.train()
     # trainer.save_model(output_dir)
