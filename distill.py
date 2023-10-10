@@ -134,7 +134,7 @@ def evaluate(epoch, tokenizer, model, polisher):
 
 
 if __name__ == '__main__':
-    model_name = 'gpt2-xl'
+    model_name = 'gpt2-large'
     model_params = {
         "TRAIN_BATCH_SIZE": 4,  # batch size within each alternative training loop
         "TRAIN_EPOCHS": 5,  # number of training epochs
