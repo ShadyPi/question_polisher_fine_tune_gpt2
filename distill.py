@@ -9,11 +9,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def formulate(base):
-    return 'A more answerable version of question \"' + base + '\" is '
+    return '<s>' + base + '</s>-><p>'
 
 
 def batch_encode(params, batch_data, tokenizer):
-    inputs = [formulate(base)+'\"'+polished+'\"' for base, polished in batch_data]
+    inputs = [formulate(base)+polished+'</p>' for base, polished in batch_data]
     # print(inputs[0])
     inputs = tokenizer.batch_encode_plus(
         inputs,
@@ -133,10 +133,10 @@ def evaluate(epoch, tokenizer, model, polisher):
 
 
 if __name__ == '__main__':
-    model_name = 'gpt2'
+    model_name = 'gpt2-xl'
     model_params = {
-        "TRAIN_BATCH_SIZE": 64,  # batch size within each alternative training loop
-        "TRAIN_EPOCHS": 10,  # number of training epochs
+        "TRAIN_BATCH_SIZE": 8,  # batch size within each alternative training loop
+        "TRAIN_EPOCHS": 5,  # number of training epochs
         "LEARNING_RATE_KG": 1e-5,  # learning rate
         "LEARNING_RATE_INF": 1e-5,  # learning rate
         "MAX_INPUT_KG_LENGTH": 150,  # max length of all input text
