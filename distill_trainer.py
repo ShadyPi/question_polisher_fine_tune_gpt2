@@ -48,7 +48,7 @@ if __name__ == '__main__':
     model_params = {
         "TRAIN_BATCH_SIZE": 4
         ,  # batch size within each alternative training
-        "TRAIN_EPOCHS": 10,  # number of training epochs
+        "TRAIN_EPOCHS": 5,  # number of training epochs
         "LEARNING_RATE_KG": 1e-5,  # learning rate
         "LEARNING_RATE_INF": 1e-5,  # learning rate
         "MAX_INPUT_KG_LENGTH": 150,  # max length of all input text
