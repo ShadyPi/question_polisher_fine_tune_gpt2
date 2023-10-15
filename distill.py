@@ -75,7 +75,7 @@ def model_polish(tokenizer, model, text):
             top_k=50,
             top_p=0.95,
             repetition_penalty=1.2,
-            pad_token_ids=tokenizer.eos_token_ids,
+            # pad_token_ids=tokenizer.eos_token_ids,
         )
         # print('input_ids:', input_ids)
         # print('output_ids:', polished_ids)
