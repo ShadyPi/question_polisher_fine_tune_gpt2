@@ -28,7 +28,7 @@ def retrieve_demo(demo_ids, tokenizer, text, demo_num):
     text_ids = text_ids['input_ids'].astype(dtype='int64')
     demo_len = np.sqrt(np.sum(demo_ids*demo_ids, axis=1))
     text_len = np.sqrt(np.sum(text_ids*text_ids))
-    similarity = np.dot(text_ids, demo_ids.T)/demo_len/text_len
+    similarity = (text_ids * demo_ids.T)/demo_len/text_len
     idx = similarity.argsort().tolist()[0][-demo_num:]
     # return random.sample(range(len(demo_ids)), demo_num)
     return []

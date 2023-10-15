@@ -10,5 +10,5 @@ test_config:
   frequency_penalty: 0
   presence_penalty: 0
   n: 1
-start_point: 0
-end_point: 99
+start_point: 100
+end_point: 199
