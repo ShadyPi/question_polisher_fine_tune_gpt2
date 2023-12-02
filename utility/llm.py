@@ -6,7 +6,7 @@ import time
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 # openai.api_key = os.getenv('OPENAI_API_KEY')
-openai.api_key = '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'
+openai.api_key = '___'
 
 
 def get_response(LLM_config, text,
